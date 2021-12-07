@@ -132,7 +132,7 @@ message = b"M\xe9\x07M\x0c\x1f3\xa0\x88L\x08\xde\x9c[\xac\x97;\xe3\xac\x02z\xde\
 
 def iterate(buff: str, depth: int, decrypt, check, hook):
     if depth == 0:
-        check(decrypt(buff), swear_words, hook)
+        check(decrypt(buff), buff, swear_words, hook)
         return
     for c in range(97, 123):
         iterate(
@@ -144,10 +144,10 @@ def iterate(buff: str, depth: int, decrypt, check, hook):
         )
 
 
-def contains_a_swear_word(msg: str, list_of_swear_words: list, hook):
+def contains_a_swear_word(msg: str, key, list_of_swear_words: list, hook):
     for item in list_of_swear_words:
         if item in msg:
-            print(f"Secret message is : {msg}", file=hook)
+            print(f"The supposed secret message is : {msg}\nThe supposed key is {key}\n", file=hook)
             return True
     return False
 
@@ -159,9 +159,9 @@ def decrypt_password(supposed_key: str, message_to_decrypt=message):
 
 threads = []
 
-with open("testFile", 'w') as f:
+with open("result_file", 'w', encoding="utf-8") as hook:
     for i in range(8, 9):
-        thread = threading.Thread(target=iterate("", i, decrypt_password, contains_a_swear_word, f))
+        thread = threading.Thread(target=iterate("", i, decrypt_password, contains_a_swear_word, hook))
         threads.append(thread)
         thread.start()
 
