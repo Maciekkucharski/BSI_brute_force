@@ -1,3 +1,4 @@
+# Made by: Maciej Kucharski, Konstanty Krzemień
 from Crypto.Cipher import DES
 import threading
 
@@ -145,7 +146,6 @@ def iterate(buff: str, depth: int, decrypt, check, hook):
     None
     '''
 
-    
     if depth == 0:
         check(decrypt(buff), buff, swear_words, hook)
         return
