@@ -131,6 +131,21 @@ message = b"M\xe9\x07M\x0c\x1f3\xa0\x88L\x08\xde\x9c[\xac\x97;\xe3\xac\x02z\xde\
 
 
 def iterate(buff: str, depth: int, decrypt, check, hook):
+    '''
+    iterates through all possible passwords
+
+    Inputs:
+    buff - beginning of the password
+    depth - number of missing characters
+    decrypt - decryptor
+    check - swearword checker
+    hook - file to save the message to
+
+    Returns:
+    None
+    '''
+
+    
     if depth == 0:
         check(decrypt(buff), buff, swear_words, hook)
         return
@@ -145,6 +160,17 @@ def iterate(buff: str, depth: int, decrypt, check, hook):
 
 
 def contains_a_swear_word(msg: str, key, list_of_swear_words: list, hook):
+    '''
+    Tests if message contains swear words. Saves the message if it does.
+    
+    Inputs:
+    msg - message to be tested
+    list_of_swear_words - list of swearwords
+    hook - file to save the message in
+    
+    Returns:
+    bolean - true if the message contains a swearword, false otherwise
+    '''
     for item in list_of_swear_words:
         if item in msg:
             print(f"The supposed secret message is : {msg}\nThe supposed key is {key}\n", file=hook)
@@ -153,6 +179,16 @@ def contains_a_swear_word(msg: str, key, list_of_swear_words: list, hook):
 
 
 def decrypt_password(supposed_key: str, message_to_decrypt=message):
+    '''
+    decrypts the message with a key
+
+    Inputs:
+    supposed_key - key to test
+    message_to_decrypt - message to decrypt
+
+    Returns:
+    decoded message
+    '''
     des = DES.new(supposed_key.encode(), DES.MODE_ECB)
     return des.decrypt(message_to_decrypt).decode(encoding='UTF-8', errors='ignore')
 
